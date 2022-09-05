@@ -1,0 +1,192 @@
+!pip install --upgrade pandas-datareader
+
+import pandas as pd
+import numpy as np
+import matplotlib.pyplot as plt
+%matplotlib inline
+import requests
+
+s = pd.Series(np.random.randn(4), name='daily returns')
+s
+
+s * 100
+
+np.abs(s)
+
+s.describe()
+
+s.index = ['AMZN', 'AAPL', 'MSFT', 'GOOG']
+s
+
+s['AMZN']
+
+s['AMZN'] = 0
+s
+
+'AAPL' in s
+
+df = pd.read_csv('https://raw.githubusercontent.com/QuantEcon/lecture-source-py/master/source/_static/lecture_specific/pandas/data/test_pwt.csv')
+type(df)
+
+df
+
+df[2:5]
+
+df[['country', 'tcgdp']]
+
+df.iloc[2:5, 0:4]
+
+df.loc[df.index[2:5], ['country', 'tcgdp']]
+
+df = df[['country', 'POP', 'tcgdp']]
+df
+
+df = df.set_index('country')
+df
+
+df.columns = 'population', 'total GDP'
+df
+
+df['population'] = df['population'] * 1e3
+df
+
+df['GDP percap'] = df['total GDP'] * 1e6 / df['population']
+df
+
+ax = df['GDP percap'].plot(kind='bar')
+ax.set_xlabel('country', fontsize=12)
+ax.set_ylabel('GDP per capita', fontsize=12)
+plt.show()
+
+df = df.sort_values(by='GDP percap', ascending=False)
+df
+
+ax = df['GDP percap'].plot(kind='bar')
+ax.set_xlabel('country', fontsize=12)
+ax.set_ylabel('GDP per capita', fontsize=12)
+plt.show()
+
+r = requests.get('http://research.stlouisfed.org/fred2/series/UNRATE/downloaddata/UNRATE.csv')
+
+url = 'http://research.stlouisfed.org/fred2/series/UNRATE/downloaddata/UNRATE.csv'
+source = requests.get(url).content.decode().split("\n")
+source[0]
+
+source[1]
+
+source[2]
+
+data = pd.read_csv(url, index_col=0, parse_dates=True)
+
+type(data)
+
+data.head()  # A useful method to get a quick look at a data frame
+
+pd.set_option('precision', 1)
+data.describe()  # Your output might differ slightly
+
+ax = data['2006':'2012'].plot(title='US Unemployment Rate', legend=False)
+ax.set_xlabel('year', fontsize=12)
+ax.set_ylabel('%', fontsize=12)
+plt.show()
+
+from pandas_datareader import wb
+
+govt_debt = wb.download(indicator='GC.DOD.TOTL.GD.ZS', country=['US', 'AU'], start=2005, end=2016).stack().unstack(0)
+ind = govt_debt.index.droplevel(-1)
+govt_debt.index = ind
+ax = govt_debt.plot(lw=2)
+ax.set_xlabel('year', fontsize=12)
+plt.title("Government Debt to GDP (%)")
+plt.show()
+
+import datetime as dt 
+from pandas_datareader import data
+
+ticker_list = {'INTC': 'Intel',
+               'MSFT': 'Microsoft',
+               'IBM': 'IBM',
+               'BHP': 'BHP',
+               'TM': 'Toyota',
+               'AAPL': 'Apple',
+               'AMZN': 'Amazon',
+               'BA': 'Boeing',
+               'QCOM': 'Qualcomm',
+               'KO': 'Coca-Cola',
+               'GOOG': 'Google',
+               'SNE': 'Sony',
+               'PTR': 'PetroChina'}
+
+def read_data(ticker_list,
+          start=dt.datetime(2019, 1, 2),
+          end=dt.datetime(2019, 12, 31)): 
+    """
+    This function reads in closing price data from Yahoo 
+    for each tick in the ticker_list.
+    """
+    ticker = pd.DataFrame()
+
+    for tick in ticker_list:
+        prices = data.DataReader(tick, 'yahoo', start, end)
+        closing_prices = prices['Close']
+        ticker[tick] = closing_prices
+
+    return ticker
+
+ticker = read_data(ticker_list)
+
+indices_list = {'^GSPC': 'S&P 500',
+               '^IXIC': 'NASDAQ',
+               '^DJI': 'Dow Jones',
+               '^N225': 'Nikkei'}
+
+p1 = ticker.iloc[0]    #Get the first set of prices as a Series
+p2 = ticker.iloc[-1]   #Get the last set of prices as a Series
+price_change = (p2 - p1) / p1 * 100
+price_change
+
+change = ticker.pct_change(periods=len(ticker)-1, axis='rows')*100
+price_change = change.iloc[-1]
+price_change
+
+price_change.sort_values(inplace=True)
+price_change = price_change.rename(index=ticker_list)
+fig, ax = plt.subplots()
+ax.set_xlabel('stock', fontsize=12)
+ax.set_ylabel('percentage change in price', fontsize=12)
+price_change.plot(kind='bar', ax=ax)
+plt.show()
+
+from myst_nb import glue
+glue("pandas_share_prices", fig, display=False)
+
+indices_data = read_data(
+        indices_list,
+        start=dt.datetime(1928, 1, 2),
+        end=dt.datetime(2020, 12, 31)
+)
+
+yearly_returns = pd.DataFrame()
+
+for index, name in indices_list.items():
+    p1 = indices_data.groupby(indices_data.index.year)[index].first()  # Get the first set of returns as a DataFrame
+    p2 = indices_data.groupby(indices_data.index.year)[index].last()   # Get the last set of returns as a DataFrame
+    returns = (p2 - p1) / p1
+    yearly_returns[name] = returns
+
+yearly_returns
+
+yearly_returns.describe()
+
+fig, axes = plt.subplots(2, 2)
+
+for iter_, ax in enumerate(axes.flatten()):            # Flatten 2-D array to 1-D array
+    index_name = yearly_returns.columns[iter_]         # Get index name per iteration
+    ax.plot(yearly_returns[index_name])                # Plot pct change of yearly returns per index
+    ax.set_ylabel("percent change", fontsize = 12)
+    ax.set_title(index_name)
+
+plt.tight_layout() 
+
+from myst_nb import glue
+glue("pandas_indices_pctchange", fig, display=False)

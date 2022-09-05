@@ -1,0 +1,94 @@
+Traceback (most recent call last):
+  File "/Library/Frameworks/Python.framework/Versions/3.7/lib/python3.7/site-packages/jupyter_cache/executors/utils.py", line 56, in single_nb_execution
+    record_timing=False,
+  File "/Library/Frameworks/Python.framework/Versions/3.7/lib/python3.7/site-packages/nbclient/client.py", line 1204, in execute
+    return NotebookClient(nb=nb, resources=resources, km=km, **kwargs).execute()
+  File "/Library/Frameworks/Python.framework/Versions/3.7/lib/python3.7/site-packages/nbclient/util.py", line 84, in wrapped
+    return just_run(coro(*args, **kwargs))
+  File "/Library/Frameworks/Python.framework/Versions/3.7/lib/python3.7/site-packages/nbclient/util.py", line 62, in just_run
+    return loop.run_until_complete(coro)
+  File "/Library/Frameworks/Python.framework/Versions/3.7/lib/python3.7/asyncio/base_events.py", line 568, in run_until_complete
+    return future.result()
+  File "/Library/Frameworks/Python.framework/Versions/3.7/lib/python3.7/site-packages/nbclient/client.py", line 664, in async_execute
+    cell, index, execution_count=self.code_cells_executed + 1
+  File "/Library/Frameworks/Python.framework/Versions/3.7/lib/python3.7/site-packages/nbclient/client.py", line 965, in async_execute_cell
+    await self._check_raise_for_error(cell, cell_index, exec_reply)
+  File "/Library/Frameworks/Python.framework/Versions/3.7/lib/python3.7/site-packages/nbclient/client.py", line 862, in _check_raise_for_error
+    raise CellExecutionError.from_cell_and_msg(cell, exec_reply_content)
+nbclient.exceptions.CellExecutionError: An error occurred while executing the following cell:
+------------------
+import numpy as np
+import matplotlib.pyplot as plt
+%matplotlib inline
+
+# Allocate memory for time series
+k = np.empty(50)
+
+fig, axes = plt.subplots(3, 1, figsize=(6, 14))
+
+# Trajectories with different α
+δ = 0.1
+s = 0.4
+α = (0.25, 0.33, 0.45)
+
+for j in range(3):
+    k[0] = 1
+    for t in range(49):
+        k[t+1] = s * k[t]**α[j] + (1 - δ) * k[t]
+    axes[0].plot(k, 'o-', label=rf"$\alpha = {α[j]},\; s = {s},\; \delta={δ}$")
+
+axes[0].grid(lw=0.2)
+axes[0].set_ylim(0, 18)
+axes[0].set_xlabel('time')
+axes[0].set_ylabel('capital')
+axes[0].legend(loc='upper left', frameon=True)
+
+# Trajectories with different s
+δ = 0.1
+α = 0.33
+s = (0.3, 0.4, 0.5)
+
+for j in range(3):
+    k[0] = 1
+    for t in range(49):
+        k[t+1] = s[j] * k[t]**α + (1 - δ) * k[t]
+    axes[1].plot(k, 'o-', label=rf"$\alpha = {α},\; s = {s[j]},\; \delta={δ}$")
+
+axes[1].grid(lw=0.2)
+axes[1].set_xlabel('time')
+axes[1].set_ylabel('capital')
+axes[1].set_ylim(0, 18)
+axes[1].legend(loc='upper left', frameon=True)
+
+# Trajectories with different δ
+δ = (0.05, 0.1, 0.15)
+α = 0.33
+s = 0.4
+
+for j in range(3):
+    k[0] = 1
+    for t in range(49):
+        k[t+1] = s * k[t]**α + (1 - δ[j]) * k[t]
+    axes[2].plot(k, 'o-', label=rf"$\alpha = {α},\; s = {s},\; \delta={δ[j]}$")
+
+axes[2].set_ylim(0, 18)
+axes[2].set_xlabel('time')
+axes[2].set_ylabel('capital')
+axes[2].grid(lw=0.2)
+axes[2].legend(loc='upper left', frameon=True)
+
+plt.show()
+------------------
+
+[0;31m---------------------------------------------------------------------------[0m
+[0;31mModuleNotFoundError[0m                       Traceback (most recent call last)
+[0;32m/var/folders/5p/zmsw1yv53hz4twsf7nhcrytr0000gn/T/ipykernel_79854/3228983060.py[0m in [0;36m<module>[0;34m[0m
+[0;32m----> 1[0;31m [0;32mimport[0m [0mnumpy[0m [0;32mas[0m [0mnp[0m[0;34m[0m[0m
+[0m[1;32m      2[0m [0;32mimport[0m [0mmatplotlib[0m[0;34m.[0m[0mpyplot[0m [0;32mas[0m [0mplt[0m[0;34m[0m[0m
+[1;32m      3[0m [0mget_ipython[0m[0;34m([0m[0;34m)[0m[0;34m.[0m[0mrun_line_magic[0m[0;34m([0m[0;34m'matplotlib'[0m[0;34m,[0m [0;34m'inline'[0m[0;34m)[0m[0;34m[0m[0m
+[1;32m      4[0m [0;34m[0m[0m
+[1;32m      5[0m [0;31m# Allocate memory for time series[0m[0;34m[0m[0;34m[0m[0m
+
+[0;31mModuleNotFoundError[0m: No module named 'numpy'
+ModuleNotFoundError: No module named 'numpy'
+

@@ -1,0 +1,124 @@
+# Import numpy symbols to scipy namespace
+from numpy import *
+from numpy.random import rand, randn
+from numpy.fft import fft, ifft
+from numpy.lib.scimath import *
+
+import numpy as np
+
+a = np.identity(3)
+
+np.random.beta(5, 5, size=3)
+
+from scipy.stats import beta
+import matplotlib.pyplot as plt
+%matplotlib inline
+
+q = beta(5, 5)      # Beta(a, b), with a = b = 5
+obs = q.rvs(2000)   # 2000 observations
+grid = np.linspace(0.01, 0.99, 100)
+
+fig, ax = plt.subplots()
+ax.hist(obs, bins=40, density=True)
+ax.plot(grid, q.pdf(grid), 'k-', linewidth=2)
+plt.show()
+
+q.cdf(0.4)      # Cumulative distribution function
+
+q.ppf(0.8)      # Quantile (inverse cdf) function
+
+q.mean()
+
+obs = beta.rvs(5, 5, size=2000)
+grid = np.linspace(0.01, 0.99, 100)
+
+fig, ax = plt.subplots()
+ax.hist(obs, bins=40, density=True)
+ax.plot(grid, beta.pdf(grid, 5, 5), 'k-', linewidth=2)
+plt.show()
+
+from scipy.stats import linregress
+
+x = np.random.randn(200)
+y = 2 * x + 0.1 * np.random.randn(200)
+gradient, intercept, r_value, p_value, std_err = linregress(x, y)
+gradient, intercept
+
+f = lambda x: np.sin(4 * (x - 1/4)) + x + x**20 - 1
+x = np.linspace(0, 1, 100)
+
+fig, ax = plt.subplots()
+ax.plot(x, f(x))
+ax.axhline(ls='--', c='k', label='$f(x)$')
+ax.set_xlabel('$x$', fontsize=12)
+ax.set_ylabel('$f(x)$', fontsize=12)
+ax.legend(fontsize=12)
+plt.show()
+
+def bisect(f, a, b, tol=10e-5):
+    """
+    Implements the bisection root finding algorithm, assuming that f is a
+    real-valued function on [a, b] satisfying f(a) < 0 < f(b).
+    """
+    lower, upper = a, b
+
+    while upper - lower > tol:
+        middle = 0.5 * (upper + lower)
+        if f(middle) > 0:   # root is between lower and middle 
+            lower, upper = lower, middle
+        else:               # root is between middle and upper 
+            lower, upper = middle, upper
+
+    return 0.5 * (upper + lower)
+
+bisect(f, 0, 1)
+
+from scipy.optimize import bisect
+
+bisect(f, 0, 1)
+
+from scipy.optimize import newton
+
+newton(f, 0.2)   # Start the search at initial condition x = 0.2
+
+newton(f, 0.7)   # Start the search at x = 0.7 instead
+
+from scipy.optimize import brentq
+
+brentq(f, 0, 1)
+
+%timeit brentq(f, 0, 1)
+
+%timeit bisect(f, 0, 1)
+
+from scipy.optimize import fixed_point
+
+fixed_point(lambda x: x**2, 10.0)  # 10.0 is an initial guess
+
+from scipy.optimize import fminbound
+
+fminbound(lambda x: x**2, -1, 2)  # Search in [-1, 2]
+
+from scipy.integrate import quad
+
+integral, error = quad(lambda x: x**2, 0, 1)
+integral
+
+def bisect(f, a, b, tol=10e-5):
+    """
+    Implements the bisection root-finding algorithm, assuming that f is a
+    real-valued function on [a, b] satisfying f(a) < 0 < f(b).
+    """
+    lower, upper = a, b
+    if upper - lower < tol:
+        return 0.5 * (upper + lower)
+    else:
+        middle = 0.5 * (upper + lower)
+        print(f'Current mid point = {middle}')
+        if f(middle) > 0:   # Implies root is between lower and middle
+            return bisect(f, lower, middle)
+        else:               # Implies root is between middle and upper
+            return bisect(f, middle, upper)
+
+f = lambda x: np.sin(4 * (x - 0.25)) + x + x**20 - 1
+bisect(f, 0, 1)

@@ -1,0 +1,285 @@
+x = True
+x
+
+type(x)
+
+y = 100 < 10
+y
+
+type(y)
+
+x + y
+
+x * y
+
+True + True
+
+bools = [True, True, False, True]  # List of Boolean values
+
+sum(bools)
+
+x = complex(1, 2)
+y = complex(2, 1)
+print(x * y)
+
+type(x)
+
+x = ('a', 'b')  # Parentheses instead of the square brackets
+x = 'a', 'b'    # Or no brackets --- the meaning is identical
+x
+
+type(x)
+
+x = [1, 2]
+x[0] = 10
+x
+
+x = (1, 2)
+x[0] = 10
+
+integers = (10, 20, 30)
+x, y, z = integers
+x
+
+y
+
+a = [2, 4, 6, 8]
+a[1:]
+
+a[1:3]
+
+a[-2:]  # Last two elements of the list
+
+s = 'foobar'
+s[-3:]  # Select the last three elements
+
+d = {'name': 'Frodo', 'age': 33}
+type(d)
+
+d['age']
+
+s1 = {'a', 'b'}
+type(s1)
+
+s2 = {'b', 'c'}
+s1.issubset(s2)
+
+s1.intersection(s2)
+
+s3 = set(('foo', 'bar', 'foo'))
+s3
+
+f = open('newfile.txt', 'w')   # Open 'newfile.txt' for writing
+f.write('Testing\n')           # Here '\n' means new line
+f.write('Testing again')
+f.close()
+
+%pwd
+
+f = open('newfile.txt', 'r')
+out = f.read()
+out
+
+print(out)
+
+%%file us_cities.txt
+new york: 8244910
+los angeles: 3819702
+chicago: 2707120
+houston: 2145146
+philadelphia: 1536471
+phoenix: 1469471
+san antonio: 1359758
+san diego: 1326179
+dallas: 1223229
+
+data_file = open('us_cities.txt', 'r')
+for line in data_file:
+    city, population = line.split(':')         # Tuple unpacking
+    city = city.title()                        # Capitalize city names
+    population = f'{int(population):,}'        # Add commas to numbers
+    print(city.ljust(15) + population)
+data_file.close()
+
+x_values = [1, 2, 3]  # Some iterable x
+for x in x_values:
+    print(x * x)
+
+for i in range(len(x_values)):
+    print(x_values[i] * x_values[i])
+
+countries = ('Japan', 'Korea', 'China')
+cities = ('Tokyo', 'Seoul', 'Beijing')
+for country, city in zip(countries, cities):
+    print(f'The capital of {country} is {city}')
+
+names = ['Tom', 'John']
+marks = ['E', 'F']
+dict(zip(names, marks))
+
+letter_list = ['a', 'b', 'c']
+for index, letter in enumerate(letter_list):
+    print(f"letter_list[{index}] = '{letter}'")
+
+animals = ['dog', 'cat', 'bird']
+plurals = [animal + 's' for animal in animals]
+plurals
+
+range(8)
+
+doubles = [2 * x for x in range(8)]
+doubles
+
+x, y = 1, 2
+x < y
+
+x > y
+
+1 < 2 < 3
+
+1 <= 2 <= 3
+
+x = 1    # Assignment
+x == 2   # Comparison
+
+1 != 2
+
+x = 'yes' if 42 else 'no'
+x
+
+x = 'yes' if [] else 'no'
+x
+
+1 < 2 and 'f' in 'foo'
+
+1 < 2 and 'g' in 'foo'
+
+1 < 2 or 'g' in 'foo'
+
+not True
+
+not not True
+
+def f(x):
+    if x < 0:
+        return 'negative'
+    return 'nonnegative'
+
+def f(x):
+    """
+    This function squares its argument
+    """
+    return x**2
+
+def f(x):
+    return x**3
+
+f = lambda x: x**3
+
+from scipy.integrate import quad
+
+quad(lambda x: x**3, 0, 2)
+
+def f(x, a=1, b=1):
+    return a + b * x
+
+f(2)
+
+f(2, a=4, b=5)
+
+import numpy as np
+
+n = 100
+ϵ_values = []
+for i in range(n):
+    e = np.random.randn()
+    ϵ_values.append(e)
+
+x_vals = [1, 2, 3]
+y_vals = [1, 1, 1]
+sum([x * y for x, y in zip(x_vals, y_vals)])
+
+sum(x * y for x, y in zip(x_vals, y_vals))
+
+sum([x % 2 == 0 for x in range(100)])
+
+sum(x % 2 == 0 for x in range(100))
+
+len([x for x in range(100) if x % 2 == 0])
+
+sum([1 for x in range(100) if x % 2 == 0])
+
+pairs = ((2, 5), (4, 2), (9, 8), (12, 10))
+sum([x % 2 == 0 and y % 2 == 0 for x, y in pairs])
+
+def p(x, coeff):
+    return sum(a * x**i for i, a in enumerate(coeff))
+
+p(1, (2, 4))
+
+def f(string):
+    count = 0
+    for letter in string:
+        if letter == letter.upper() and letter.isalpha():
+            count += 1
+    return count
+
+f('The Rain in Spain')
+
+def count_uppercase_chars(s):
+    return sum([c.isupper() for c in s])
+
+count_uppercase_chars('The Rain in Spain')
+
+def f(seq_a, seq_b):
+    is_subset = True
+    for a in seq_a:
+        if a not in seq_b:
+            is_subset = False
+    return is_subset
+
+# == test == #
+
+print(f([1, 2], [1, 2, 3]))
+print(f([1, 2, 3], [1, 2]))
+
+def f(seq_a, seq_b):
+    return set(seq_a).issubset(set(seq_b))
+
+def linapprox(f, a, b, n, x):
+    """
+    Evaluates the piecewise linear interpolant of f at x on the interval
+    [a, b], with n evenly spaced grid points.
+
+    Parameters
+    ==========
+        f : function
+            The function to approximate
+
+        x, a, b : scalars (floats or integers)
+            Evaluation point and endpoints, with a <= x <= b
+
+        n : integer
+            Number of grid points
+
+    Returns
+    =======
+        A float. The interpolant evaluated at x
+
+    """
+    length_of_interval = b - a
+    num_subintervals = n - 1
+    step = length_of_interval / num_subintervals
+
+    # === find first grid point larger than x === #
+    point = a
+    while point <= x:
+        point += step
+
+    # === x must lie between the gridpoints (point - step) and point === #
+    u, v = point - step, point
+
+    return f(u) + (x - u) * (f(v) - f(u)) / (v - u)
+
+n = 100
+ϵ_values = [np.random.randn() for i in range(n)]

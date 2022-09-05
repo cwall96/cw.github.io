@@ -1,0 +1,75 @@
+!pip install --upgrade quantecon
+
+a, b = 10, 10
+a + b
+
+a, b = 'foo', 'bar'
+a + b
+
+a, b = ['foo'], ['bar']
+a + b
+
+import random
+import numpy as np
+import quantecon as qe
+
+n = 1_000_000
+
+%%time
+
+y = 0      # Will accumulate and store sum
+for i in range(n):
+    x = random.uniform(0, 1)
+    y += x**2
+
+%%time
+
+x = np.random.uniform(0, 1, n)
+y = np.sum(x**2)
+
+np.cos(1.0)
+
+np.cos(np.linspace(0, 1, 3))
+
+import matplotlib.pyplot as plt
+%matplotlib inline
+from mpl_toolkits.mplot3d.axes3d import Axes3D
+from matplotlib import cm
+
+def f(x, y):
+    return np.cos(x**2 + y**2) / (1 + x**2 + y**2)
+
+xgrid = np.linspace(-3, 3, 50)
+ygrid = xgrid
+x, y = np.meshgrid(xgrid, ygrid)
+
+fig = plt.figure()
+ax = fig.add_subplot(111, projection='3d')
+ax.plot_surface(x,
+                y,
+                f(x, y),
+                rstride=2, cstride=2,
+                cmap=cm.jet,
+                alpha=0.7,
+                linewidth=0.25)
+ax.set_zlim(-0.5, 1.0)
+ax.set_xlabel('$x$', fontsize=14)
+ax.set_ylabel('$y$', fontsize=14)
+plt.show()
+
+grid = np.linspace(-3, 3, 1000)
+
+%%time
+
+m = -np.inf
+
+for x in grid:
+    for y in grid:
+        z = f(x, y)
+        if z > m:
+            m = z
+
+%%time
+
+x, y = np.meshgrid(grid, grid)
+np.max(f(x, y))

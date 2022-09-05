@@ -1,0 +1,400 @@
+e = enumerate(['foo', 'bar'])
+next(e)
+
+next(e)
+
+for i in ['spam', 'eggs']:
+    print(i)
+
+x = ['foo', 'bar']
+type(x)
+
+next(x)
+
+x = ['foo', 'bar']
+type(x)
+
+y = iter(x)
+type(y)
+
+next(y)  
+
+next(y)
+
+next(y)    
+
+iter(42)
+
+x = [10, -10]
+max(x)
+
+y = iter(x)
+type(y)    
+
+max(y)
+
+x = [10, -10]
+y = iter(x)
+max(y)
+
+max(y)
+
+x = 42
+
+def f(string):      # Create a function called f
+    print(string)   # that prints any string it's passed
+
+g = f
+id(g) == id(f)
+
+g('test')
+
+x = 'foo'
+id(x)
+
+x = 'bar'  # No names bound to the first object
+
+x = 42
+
+print(__name__)
+
+def f(x):
+    a = 2
+    print(locals())
+    return a * x
+
+f(1)
+
+dir()[0:10]
+
+dir(__builtins__)[0:10]
+
+__builtins__.max
+
+max
+
+__builtins__.max == max
+
+def f():
+    a = 2
+    def g():
+        b = 4
+        print(a * b)
+    g()
+
+def f(x):
+    x = x + 1
+    return x
+
+x = 1
+print(f(x), x)
+
+def f(x):
+    x[0] = x[0] + 1
+    return x
+
+x = [1]
+print(f(x), x)
+
+def var(y):
+    n = len(y)
+    assert n > 1, 'Sample size must be greater than one.'
+    return np.sum((y - y.mean())**2) / float(n-1)
+
+1 / 0
+
+x1 = y1
+
+'foo' + 6
+
+X = []
+x = X[0]
+
+def f(x):
+    try:
+        return 1.0 / x
+    except ZeroDivisionError:
+        print('Error: division by zero.  Returned None')
+    return None
+
+f(2)
+
+f(0)
+
+f(0.0)
+
+def f(x):
+    try:
+        return 1.0 / x
+    except ZeroDivisionError:
+        print('Error: Division by zero.  Returned None')
+    except TypeError:
+        print('Error: Unsupported operation.  Returned None')
+    return None
+
+f(2)
+
+f(0)
+
+f('foo')
+
+def f(x):
+    try:
+        return 1.0 / x
+    except (TypeError, ZeroDivisionError):
+        print('Error: Unsupported operation.  Returned None')
+    return None
+
+f(2)
+
+f(0)
+
+f('foo')
+
+def f(x):
+    try:
+        return 1.0 / x
+    except:
+        print('Error.  Returned None')
+    return None
+
+import numpy as np
+
+def f(x):
+    return np.log(np.log(x))
+
+def g(x):
+    return np.sqrt(42 * x)
+
+# Program continues with various calculations using f and g
+
+import numpy as np
+
+def f(x):
+    assert x >= 0, "Argument must be nonnegative"
+    return np.log(np.log(x))
+
+def g(x):
+    assert x >= 0, "Argument must be nonnegative"
+    return np.sqrt(42 * x)
+
+# Program continues with various calculations using f and g
+
+import numpy as np
+
+def check_nonneg(func):
+    def safe_function(x):
+        assert x >= 0, "Argument must be nonnegative"
+        return func(x)
+    return safe_function
+
+def f(x):
+    return np.log(np.log(x))
+
+def g(x):
+    return np.sqrt(42 * x)
+
+f = check_nonneg(f)
+g = check_nonneg(g)
+# Program continues with various calculations using f and g
+
+def f(x):
+    return np.log(np.log(x))
+
+def f(x):
+    return np.log(np.log(x))
+
+def g(x):
+    return np.sqrt(42 * x)
+
+f = check_nonneg(f)
+g = check_nonneg(g)
+
+@check_nonneg
+def f(x):
+    return np.log(np.log(x))
+
+@check_nonneg
+def g(x):
+    return np.sqrt(42 * x)
+
+class Car:
+
+    def __init__(self, miles=1000):
+        self.miles = miles
+        self.kms = miles * 1.61
+
+    # Some other functionality, details omitted
+
+car = Car()
+car.miles
+
+car.kms
+
+car.miles = 6000
+car.kms
+
+class Car:
+
+    def __init__(self, miles=1000):
+        self._miles = miles
+        self._kms = miles * 1.61
+
+    def set_miles(self, value):
+        self._miles = value
+        self._kms = value * 1.61
+
+    def set_kms(self, value):
+        self._kms = value
+        self._miles = value / 1.61
+
+    def get_miles(self):
+        return self._miles
+
+    def get_kms(self):
+        return self._kms
+
+    miles = property(get_miles, set_miles)
+    kms = property(get_kms, set_kms)
+
+car = Car()
+car.miles
+
+car.miles = 6000
+car.kms
+
+class Car:
+
+    def __init__(self, miles=1000):
+        self._miles = miles
+        self._kms = miles * 1.61
+
+    @property
+    def miles(self):
+        return self._miles
+
+    @property
+    def kms(self):
+        return self._kms
+
+    @miles.setter
+    def miles(self, value):
+        self._miles = value
+        self._kms = value * 1.61
+
+    @kms.setter
+    def kms(self, value):
+        self._kms = value
+        self._miles = value / 1.61
+
+singular = ('dog', 'cat', 'bird')
+type(singular)
+
+plural = [string + 's' for string in singular]
+plural
+
+type(plural)
+
+singular = ('dog', 'cat', 'bird')
+plural = (string + 's' for string in singular)
+type(plural)
+
+next(plural)
+
+next(plural)
+
+next(plural)
+
+sum((x * x for x in range(10)))
+
+sum(x * x for x in range(10))
+
+def f():
+    yield 'start'
+    yield 'middle'
+    yield 'end'
+
+type(f)
+
+gen = f()
+gen
+
+next(gen)
+
+next(gen)
+
+next(gen)
+
+next(gen)
+
+def f():
+    yield 'start'
+    yield 'middle'  # This line!
+    yield 'end'
+
+def g(x):
+    while x < 100:
+        yield x
+        x = x * x
+
+g
+
+gen = g(2)
+type(gen)
+
+next(gen)
+
+next(gen)
+
+next(gen)
+
+next(gen)
+
+def g(x):
+    while x < 100:
+        yield x
+        x = x * x  # execution continues from here
+
+def g(x):
+    while 1:
+        yield x
+        x = x * x
+
+import random
+n = 10000000
+draws = [random.uniform(0, 1) < 0.5 for i in range(n)]
+sum(draws)
+
+def f(n):
+    i = 1
+    while i <= n:
+        yield random.uniform(0, 1) < 0.5
+        i += 1
+
+n = 10000000
+draws = f(n)
+draws
+
+sum(draws)
+
+def x_loop(t):
+    x = 1
+    for i in range(t):
+        x = 2 * x
+    return x
+
+def x(t):
+    if t == 0:
+        return 1
+    else:
+        return 2 * x(t-1)
+
+def x(t):
+    if t == 0:
+        return 0
+    if t == 1:
+        return 1
+    else:
+        return x(t-1) + x(t-2)
+
+print([x(i) for i in range(10)])

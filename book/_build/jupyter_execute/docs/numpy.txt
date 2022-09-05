@@ -1,0 +1,358 @@
+import numpy as np
+
+a = np.zeros(3)
+a
+
+type(a)
+
+a = np.zeros(3)
+type(a[0])
+
+a = np.zeros(3, dtype=int)
+type(a[0])
+
+z = np.zeros(10)
+
+z.shape
+
+z.shape = (10, 1)
+z
+
+z = np.zeros(4)
+z.shape = (2, 2)
+z
+
+z = np.empty(3)
+z
+
+z = np.linspace(2, 4, 5)  # From 2 to 4, with 5 elements
+
+z = np.identity(2)
+z
+
+z = np.array([10, 20])                 # ndarray from Python list
+z
+
+type(z)
+
+z = np.array((10, 20), dtype=float)    # Here 'float' is equivalent to 'np.float64'
+z
+
+z = np.array([[1, 2], [3, 4]])         # 2D array from a list of lists
+z
+
+na = np.linspace(10, 20, 2)
+na is np.asarray(na)   # Does not copy NumPy arrays
+
+na is np.array(na)     # Does make a new copy --- perhaps unnecessarily
+
+z = np.linspace(1, 2, 5)
+z
+
+z[0]
+
+z[0:2]  # Two elements, starting at element 0
+
+z[-1]
+
+z = np.array([[1, 2], [3, 4]])
+z
+
+z[0, 0]
+
+z[0, 1]
+
+z[0, :]
+
+z[:, 1]
+
+z = np.linspace(2, 4, 5)
+z
+
+indices = np.array((0, 2, 3))
+z[indices]
+
+z
+
+d = np.array([0, 1, 1, 0, 0], dtype=bool)
+d
+
+z[d]
+
+z = np.empty(3)
+z
+
+z[:] = 42
+z
+
+a = np.array((4, 3, 2, 1))
+a
+
+a.sort()              # Sorts a in place
+a
+
+a.sum()               # Sum
+
+a.mean()              # Mean
+
+a.max()               # Max
+
+a.argmax()            # Returns the index of the maximal element
+
+a.cumsum()            # Cumulative sum of the elements of a
+
+a.cumprod()           # Cumulative product of the elements of a
+
+a.var()               # Variance
+
+a.std()               # Standard deviation
+
+a.shape = (2, 2)
+a.T                   # Equivalent to a.transpose()
+
+z = np.linspace(2, 4, 5)
+z
+
+z.searchsorted(2.2)
+
+a = np.array((4, 3, 2, 1))
+
+np.sum(a)
+
+np.mean(a)
+
+a = np.array([1, 2, 3, 4])
+b = np.array([5, 6, 7, 8])
+a + b
+
+a * b
+
+a + 10
+
+a * 10
+
+A = np.ones((2, 2))
+B = np.ones((2, 2))
+A + B
+
+A + 10
+
+A * B
+
+A = np.ones((2, 2))
+B = np.ones((2, 2))
+A @ B
+
+A = np.array((1, 2))
+B = np.array((10, 20))
+A @ B
+
+A = np.array(((1, 2), (3, 4)))
+A
+
+A @ (0, 1)
+
+a = np.array([42, 44])
+a
+
+a[-1] = 0  # Change last element to 0
+a
+
+a = np.random.randn(3)
+a
+
+b = a
+b[0] = 0.0
+a
+
+a = np.random.randn(3)
+a
+
+b = np.copy(a)
+b
+
+b[:] = 1
+b
+
+a
+
+z = np.array([1, 2, 3])
+np.sin(z)
+
+n = len(z)
+y = np.empty(n)
+for i in range(n):
+    y[i] = np.sin(z[i])
+
+z
+
+(1 / np.sqrt(2 * np.pi)) * np.exp(- 0.5 * z**2)
+
+def f(x):
+    return 1 if x > 0 else 0
+
+x = np.random.randn(4)
+x
+
+np.where(x > 0, 1, 0)  # Insert 1 if x > 0 true, otherwise 0
+
+f = np.vectorize(f)
+f(x)                # Passing the same vector x as in the previous example
+
+z = np.array([2, 3])
+y = np.array([2, 3])
+z == y
+
+y[0] = 5
+z == y
+
+z != y
+
+z = np.linspace(0, 10, 5)
+z
+
+z > 3
+
+b = z > 3
+b
+
+z[b]
+
+z[z > 3]
+
+z = np.random.randn(10000)  # Generate standard normals
+y = np.random.binomial(10, 0.5, size=1000)    # 1,000 draws from Bin(10, 0.5)
+y.mean()
+
+A = np.array([[1, 2], [3, 4]])
+
+np.linalg.det(A)           # Compute the determinant
+
+np.linalg.inv(A)           # Compute the inverse
+
+from random import uniform
+
+def sample(q):
+    a = 0.0
+    U = uniform(0, 1)
+    for i in range(len(q)):
+        if a < U <= a + q[i]:
+            return i
+        a = a + q[i]
+
+import matplotlib.pyplot as plt
+%matplotlib inline
+
+def p(x, coef):
+    X = np.ones_like(coef)
+    X[1:] = x
+    y = np.cumprod(X)   # y = [1, x, x**2,...]
+    return coef @ y
+
+x = 2
+coef = np.linspace(2, 4, 3)
+print(coef)
+print(p(x, coef))
+# For comparison
+q = np.poly1d(np.flip(coef))
+print(q(x))
+
+from numpy import cumsum
+from numpy.random import uniform
+
+class DiscreteRV:
+    """
+    Generates an array of draws from a discrete random variable with vector of
+    probabilities given by q.
+    """
+
+    def __init__(self, q):
+        """
+        The argument q is a NumPy array, or array like, nonnegative and sums
+        to 1
+        """
+        self.q = q
+        self.Q = cumsum(q)
+
+    def draw(self, k=1):
+        """
+        Returns k draws from q. For each such draw, the value i is returned
+        with probability q[i].
+        """
+        return self.Q.searchsorted(uniform(0, 1, size=k))
+
+q = (0.1, 0.9)
+d = DiscreteRV(q)
+d.q = (0.5, 0.5)
+
+"""
+Modifies ecdf.py from QuantEcon to add in a plot method
+
+"""
+
+class ECDF:
+    """
+    One-dimensional empirical distribution function given a vector of
+    observations.
+
+    Parameters
+    ----------
+    observations : array_like
+        An array of observations
+
+    Attributes
+    ----------
+    observations : array_like
+        An array of observations
+
+    """
+
+    def __init__(self, observations):
+        self.observations = np.asarray(observations)
+
+    def __call__(self, x):
+        """
+        Evaluates the ecdf at x
+
+        Parameters
+        ----------
+        x : scalar(float)
+            The x at which the ecdf is evaluated
+
+        Returns
+        -------
+        scalar(float)
+            Fraction of the sample less than x
+
+        """
+        return np.mean(self.observations <= x)
+
+    def plot(self, ax, a=None, b=None):
+        """
+        Plot the ecdf on the interval [a, b].
+
+        Parameters
+        ----------
+        a : scalar(float), optional(default=None)
+            Lower endpoint of the plot interval
+        b : scalar(float), optional(default=None)
+            Upper endpoint of the plot interval
+
+        """
+
+        # === choose reasonable interval if [a, b] not specified === #
+        if a is None:
+            a = self.observations.min() - self.observations.std()
+        if b is None:
+            b = self.observations.max() + self.observations.std()
+
+        # === generate plot === #
+        x_vals = np.linspace(a, b, num=100)
+        f = np.vectorize(self.__call__)
+        ax.plot(x_vals, f(x_vals))
+        plt.show()
+
+fig, ax = plt.subplots()
+X = np.random.randn(1000)
+F = ECDF(X)
+F.plot(ax)
